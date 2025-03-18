@@ -13,6 +13,7 @@ class NotificacaoEmail extends Component
     {
         $this->loading = true;
         $this->dispatchBrowserEvent('noticacao');
+
     }
     
 }
