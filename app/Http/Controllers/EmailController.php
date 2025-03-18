@@ -61,6 +61,7 @@ class EmailController extends Controller
             try {
                 Mail::to($email)->send(new Send($request->subject, $request->mensagem));
                 Log::info("E-mail enviado para: $email");
+                sleep(4);
             } catch (\Exception $e) {
                 Log::error('Erro ao enviar e-mail para: ' . $email . ' | Erro: ' . $e->getMessage());
                 $errors[] = "Erro ao enviar e-mail para: $email";
