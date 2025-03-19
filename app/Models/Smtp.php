@@ -36,8 +36,8 @@ class Smtp extends Model
         $this->attributes['password'] = bcrypt($value);
     }
 
-    // public function getPasswordattribute()
-    // {
-    //     return decrypt($this->attributes['password']);
-    // }
+    public function getPasswordattribute()
+    {
+        return decrypt($this->attributes['password']);
+    }
 }
