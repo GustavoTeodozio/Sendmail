@@ -7,13 +7,17 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\EmailController;
 use App\Livewire\SmtpSettings;
 use GuzzleHttp\Middleware;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return redirect()->route('login');
 })->name('home');
 
 
-Route::view('dashboard', 'dashboard')
+
+Route::delete('/dashboard/delete/{id}', [DashboardController::class, 'destroy'])->name('dashboard.delete');
+
+Route::get('dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 

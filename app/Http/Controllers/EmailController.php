@@ -9,9 +9,11 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use App\Models\SaveEmail;
 
 class EmailController extends Controller
 {
+
     public function send(Request $request)
     {
         if (!Auth::check()) {
@@ -54,6 +56,7 @@ class EmailController extends Controller
 
         $emails = explode(',', $request->emails);
         $errors = [];
+        $savedEmails = [];
 
         foreach ($emails as $email) {
             $email = trim($email);
@@ -61,11 +64,26 @@ class EmailController extends Controller
             try {
                 Mail::to($email)->send(new Send($request->subject, $request->mensagem));
                 Log::info("E-mail enviado para: $email");
+
+                $savedEmails[] = [
+                    'user_id' => Auth::id(),
+                    'email' => $email,
+                    'subject' => $request->subject,
+                    'message' => $request->mensagem,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+
+
                 sleep(4);
             } catch (\Exception $e) {
                 Log::error('Erro ao enviar e-mail para: ' . $email . ' | Erro: ' . $e->getMessage());
                 $errors[] = "Erro ao enviar e-mail para: $email";
             }
+        }
+
+        if (!empty($savedEmails)) {
+            saveemail::insert($savedEmails); 
         }
 
         if (count($errors) > 0) {
