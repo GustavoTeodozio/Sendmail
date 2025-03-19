@@ -51,39 +51,37 @@
         </div>
     </div>
 
-    <!-- Script para controlar o spinner e enviar o formulário via AJAX -->
     <script>
         document.getElementById('emailForm').addEventListener('submit', function (event) {
-            event.preventDefault(); // Impede o envio padrão do formulário
+            event.preventDefault();
 
-            // Mostra o spinner
+
             document.getElementById('spinnerModal').classList.remove('hidden');
 
-            // Captura os dados do formulário
+
             const formData = new FormData(this);
 
-            // Envia os dados via AJAX
+
             fetch("{{ route('enviar.email') }}", {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}', // Adiciona o token CSRF
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 },
             })
-                .then(response => response.json()) // Converte a resposta para JSON
+                .then(response => response.json())
                 .then(data => {
-                    // Esconde o spinner após o envio ser concluído
+
                     document.getElementById('spinnerModal').classList.add('hidden');
 
-                    // Exibe uma mensagem de sucesso ou erro
+
                     if (data.success) {
-                        alert(data.message); // E-mails enviados com sucesso
+                        alert(data.message);
                     } else {
                         alert(data.message + '\nErros: ' + (data.errors ? data.errors.join('\n') : ''));
                     }
                 })
                 .catch(error => {
-                    // Esconde o spinner em caso de erro na requisição
                     document.getElementById('spinnerModal').classList.add('hidden');
                     alert('Erro na requisição: ' + error.message);
                 });

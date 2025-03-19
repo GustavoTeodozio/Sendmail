@@ -40,7 +40,7 @@ class EmailController extends Controller
         Config::set('mail.default', $smtpSettings->mailer);
 
         $request->validate([
-            'emails' => ['required', 'string', function ($attribute, $value, $fail) {
+            'emails' => ['required', 'string', function ($value, $fail) {
                 $emails = explode(',', $value);
                 foreach ($emails as $email) {
                     if (!filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {
