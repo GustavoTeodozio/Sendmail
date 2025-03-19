@@ -29,15 +29,15 @@ class Smtp extends Model
     }
 
 
-    //ajustar aqui
+    //gera bug
 
-    public function setPasswordattribute($value)
-    {
-        $this->attributes['password'] = bcrypt($value);
-    }
+//     public function setPasswordattribute($value)
+//     {
+//         $this->attributes['password'] = bcrypt($value);
+//     }
 
-    public function getPasswordattribute()
-    {
-        return decrypt($this->attributes['password']);
-    }
-}
+//     public function getPasswordattribute()
+//     {
+//         return decrypt($this->attributes['password']);
+//     }
+// }
