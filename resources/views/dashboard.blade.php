@@ -22,7 +22,7 @@
         @foreach ($latestEmails as $email)
             <li class="text-gray-700 dark:text-gray-300">
                 <strong>Assunto:</strong> {{ $email->subject }} <br>
-                <strong>Email enviado:</strong> {{ $email->email }} <br> 
+                <strong>Email enviado:</strong> {{ $email->email }} <br>
                 <strong>Enviado em:</strong> {{ $email->formatted_date }} <br>
                 <!-- Adiciona o botão de exclusão -->
                 <form action="{{ route('dashboard.delete', $email->id) }}" method="POST" style="display: inline;">
@@ -33,52 +33,57 @@
             </li>
         @endforeach
     </ul>
-    
 
+
+    <!-- Chart.js -->
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        let chartType = 'line';
-        const ctx = document.getElementById('emailChart').getContext('2d');
+        document.addEventListener('DOMContentLoaded', function () {
+            let chartType = 'line';
+            const ctx = document.getElementById('emailChart').getContext('2d');
 
-        // Transformar os dados para o formato que o Chart.js espera
-        const labels = @json($emailsSent->pluck('formatted_date'));
-        const data = @json($emailsSent->pluck('count'));
+            // Transformar os dados para o formato que o Chart.js espera
+            const labels = @json($emailsSent->pluck('formatted_date'));
+            const data = @json($emailsSent->pluck('count'));
 
-        const chartData = {
-            labels: labels,
-            datasets: [{
-                label: 'E-mails Enviados',
-                data: data,
-                backgroundColor: ['rgba(54, 162, 235, 0.5)'],
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        };
+            const chartData = {
+                labels: labels,
+                datasets: [{
+                    label: 'E-mails Enviados',
+                    data: data,
+                    backgroundColor: ['rgba(54, 162, 235, 0.5)'],
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            };
 
-        // Corrigir a criação do gráfico
-        let emailChart = new Chart(ctx, {
-            type: chartType,
-            data: chartData,
-            options: {
-                responsive: true,
-                scales: {
-                    y: { beginAtZero: true }
-                }
+            // Função para criar o gráfico
+            function createChart(type) {
+                return new Chart(ctx, {
+                    type: type,
+                    data: chartData,
+                    options: {
+                        responsive: true,
+                        scales: type === 'pie' ? {} : {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
             }
-        });
 
-        document.getElementById('chartType').addEventListener('change', function (event) {
-            chartType = event.target.value;
-            emailChart.destroy();
-            emailChart = new Chart(ctx, {
-                type: chartType,
-                data: chartData,
-                options: {
-                    responsive: true,
-                    scales: chartType === 'pie' ? {} : { y: { beginAtZero: true } }
-                }
+            // Criar o gráfico inicialmente
+            let emailChart = createChart(chartType);
+
+            // Mudar o tipo do gráfico ao selecionar uma opção no dropdown
+            document.getElementById('chartType').addEventListener('change', function (event) {
+                chartType = event.target.value;
+
+                // Destruir o gráfico anterior e criar um novo com o novo tipo
+                emailChart.destroy();
+                emailChart = createChart(chartType);
             });
         });
     </script>
+
 </x-layouts.app>
