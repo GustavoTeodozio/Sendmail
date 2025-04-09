@@ -37,7 +37,7 @@ class Send extends Mailable
      */
     public function envelope(): Envelope
     {
-        // Buscar as configurações do banco de dados para o usuário logado
+        
         $smtp = Smtp::where('user_id', Auth::id())->first();
 
         if ($smtp) {
@@ -50,7 +50,7 @@ class Send extends Mailable
 
         return new Envelope(
             subject: $this->subject, 
-            from: new Address('gustavo.sampaio195@gmail.com', 'Gustavo'),
+            from: new Address($smtp->from_address, $smtp->from_name), 
         );
     }
 
@@ -60,9 +60,9 @@ class Send extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'email.meuemail',  // A view que contém o corpo do e-mail
+            view: 'email.meuemail',  
             with: [
-                'mensagem' => $this->mensagem,  // Passando a mensagem para a view
+                'mensagem' => $this->mensagem,  
             ],
         );
     }

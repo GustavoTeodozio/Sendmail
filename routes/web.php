@@ -9,17 +9,21 @@ use App\Livewire\SmtpSettings;
 use GuzzleHttp\Middleware;
 use App\Http\Controllers\DashboardController;
 
+
 Route::get('/', function () {
     return redirect()->route('login');
 })->name('home');
 
 
 
-Route::delete('/dashboard/delete/{id}', [DashboardController::class, 'destroy'])->name('dashboard.delete');
+Route::middleware(['auth'])->group(function () {
+    Route::delete('/dashboard/delete/{id}', [DashboardController::class, 'destroy'])
+        ->name('dashboard.delete');
 
-Route::get('dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->middleware(['verified'])
+        ->name('dashboard');
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');

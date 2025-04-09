@@ -43,7 +43,7 @@
         </flux:field>
 
         <flux:field class="mt-4">
-            <flux:label>Senha</flux:label>
+            <flux:label>Senha de app</flux:label>
             <flux:input type="password" wire:model="password" class="border border-gray-300 p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
         </flux:field>
 

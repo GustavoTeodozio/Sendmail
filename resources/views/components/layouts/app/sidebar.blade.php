@@ -25,6 +25,10 @@
                     {{ __('Enviar E-mail') }}
                 </flux:navlist.item>
 
+                {{-- <flux:navlist.item icon="chat-bubble-oval-left-ellipsis" :href="route('index')"
+                    :current="Route::currentRouteName() === 'index'" wire:navigate>
+                    {{ __('Enviar WhatsApp') }}
+                </flux:navlist.item> --}}
 
                 <flux:navlist.item href="{{ route('smtp.settings') }}" icon="adjustments-vertical">
                     Configuração SMTP
